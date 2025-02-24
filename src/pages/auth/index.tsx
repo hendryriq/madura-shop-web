@@ -10,7 +10,7 @@ export default function Login() {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const router = useRouter()
 
-    function handleLogin(e: any) {
+    function handleLogin(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
 
         const data = {
