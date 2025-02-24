@@ -1,82 +1,36 @@
-import React, { useState } from "react";
-import { useRouter } from "next/router";
-import Layout from "@/components/layout/layout.module";
-import Card from "@/components/card/card.module";
-import { data, DataProduct } from "@/dummy/data";
+import React from 'react'
+import Layout from '@/components/layout/layout.module'
 
-export default function Product() {
-  const [search, setSearch] = useState<string>("");
-  const [category, setCatergory] = useState<string>("All");
-  const [sort, setSort] = useState<string>("None");
+import { useRouter } from 'next/router'
+import { data } from '@/dummy/data'
 
-  const router = useRouter();
+export default function Detail() {
 
-  const sortOptions = ['None', 'Harga Terendah ke Harga Tertinggi', 'Harga Tertinggi ke Terendah']
-  const categories = ["All", "Beras", "Minyak", "Gula", "Telur"];
+    const router = useRouter()
+    const { id } = router.query
 
-  const filteredProducts = data
-    .filter((product) =>
-      category === "All" ? true : product.category === category
+    const product = data.find((item) => item.id === id)
+
+    return (
+        <Layout>
+            <div className='w-screen h-screen flex justify-center items-center p-5'>
+                {
+                    product !== undefined ?
+                        <div className='h-1/2 flex bg-slate-200 rounded-md'>
+                            <div className='w-1/2 p-5 rounded-md'>
+                                <img
+                                    src={product?.image !== "" ? product?.image : 'https://i.pinimg.com/736x/2a/86/a5/2a86a560f0559704310d98fc32bd3d32.jpg'}
+                                    className='w-full h-full rounded-md' />
+                            </div>
+                            <div className='flex flex-col gap-y-5 justify-center '>
+                                <h2 className='font-semibold text-lg text-slate-700'>{product?.title}</h2>
+                                <p className='text-md text-slate-500'>{product?.detail}</p>
+                                <p className='font-semibold text-md text-red-500'>Rp {product?.price}</p>
+                                <button className='p-3 bg-amber-600 text-white rounded-md font-semibold w-40 h-14'>Beli Sekarang!</button>
+                            </div>
+                        </div> : <h2 className='text-amber-700 font-semibold text-lg'>Maaf produk yang anda cari tidak ada bos!</h2>
+                }
+            </div>
+        </Layout>
     )
-    .filter((product: DataProduct) =>
-      [product.title, product.description, product.price.toString()].some(
-        (field) => field.toLowerCase().includes(search.toLocaleLowerCase())
-      )
-    )
-    .sort((low, high) => {
-      if (sort === "Harga Terendah ke Harga Tertinggi") {
-        return low.price - high.price;
-      } else if (sort === "Harga Tertinggi ke Terendah") {
-        return (high.price = low.price);
-      } else {
-        return 0;
-      }
-    });
-
-  return (
-    <div>
-      <Layout>
-        <div className="w-full h-full flex p-5 bg-red-500">
-          <input
-            type="text"
-            placeholder="Search ..."
-            onChange={(e) => setSearch(e.target.value)}
-            className="border p-2 rounded w-1/2"
-          />
-          <select
-            value={category}
-            onChange={(e) => setCatergory(e.target.value)}
-            className="border p-2 rounded-md"
-          >
-            {categories.map((item, key: number) => (
-              <option>{item}</option>
-            ))}
-          </select>
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value)}
-            className="border p-2 rounded-md"
-          >
-            {sortOptions.map((item, key: number) => (
-              <option>{item}</option>
-            ))}
-          </select>
-        </div>
-        <div className="grid grid-cols-3 gap-5 p-5">
-          {filteredProducts.map((item: DataProduct, key: number) => (
-            <Card
-              key={item.id}
-              id={item.id}
-              title={item.title}
-              description={item.description}
-              price={item.price}
-              image={item.image}
-              category={item.category}
-              onClick={() => router.push(`/product/${item.id}`)}
-            />
-          ))}
-        </div>
-      </Layout>
-    </div>
-  );
 }
