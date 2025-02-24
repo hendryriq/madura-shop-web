@@ -48,7 +48,7 @@ export default function Product() {
             onChange={(e) => setCatergory(e.target.value)}
             className="border p-2 rounded-md"
           >
-            {categories.map((item) => (
+            {categories.map((item, key: number) => (
               <option>{item}</option>
             ))}
           </select>
@@ -57,13 +57,13 @@ export default function Product() {
             onChange={(e) => setSort(e.target.value)}
             className="border p-2 rounded-md"
           >
-            {sortOptions.map((item) => (
+            {sortOptions.map((item, key: number) => (
               <option>{item}</option>
             ))}
           </select>
         </div>
         <div className="grid grid-cols-3 gap-5 p-5">
-          {filteredProducts.map((item: DataProduct) => (
+          {filteredProducts.map((item: DataProduct, key: number) => (
             <Card
               key={item.id}
               id={item.id}
