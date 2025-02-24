@@ -77,7 +77,6 @@ export default function Product() {
           ))}
         </div>
       </Layout>
-      {/* <button onClick={logout}>Logout</button> */}
     </div>
   );
 }
